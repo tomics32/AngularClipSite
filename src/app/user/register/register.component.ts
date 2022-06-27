@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import IUser from 'src/app/models/user.model';
-
+import { RegisterValidators } from '../validators/register-validators';
 
 
 
@@ -57,7 +57,7 @@ registerForm = new FormGroup({
  confirm_password: this.confirm_password,
  phoneNumber: this.phoneNumber
 
-});
+}, [RegisterValidators.match('password', 'confirm_password')]); //In () there are control names of the fields in html file
  
 async register()
 {
