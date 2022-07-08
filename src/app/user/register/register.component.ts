@@ -13,12 +13,17 @@ import { EmailTaken } from '../validators/email-taken';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+
+  
   constructor(
     private auth: AuthService,
     private emailTaken: EmailTaken
     ) {}
+
+  
   
   inSubmission = false;
+  
 
   name = new FormControl('', [
     Validators.required,

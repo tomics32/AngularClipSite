@@ -12,5 +12,8 @@ export class EmailTaken implements AsyncValidator {
        return this.auth.fetchSignInMethodsForEmail(control.value).then(
             response => response.length ? { emailTaken: true} : null
         )
+        
     }
+
+    
 }
