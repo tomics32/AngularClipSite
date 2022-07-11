@@ -14,6 +14,7 @@ import { AboutComponent } from './about/about.component'
 import { VideoModule } from './video/video.module';
 import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AngularFireStorageModule} from '@angular/fire/compat/storage'
  
 
 @NgModule({
@@ -33,7 +34,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AngularFireStorageModule
     
   ],
   providers: [],

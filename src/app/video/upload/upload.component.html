@@ -1,4 +1,5 @@
 
+
   <!-- Main Content -->
   <section class="container mx-auto my-8 bg-secondary p-6">
     <div class="rounded relative flex flex-col">
@@ -24,9 +25,10 @@
 
       <!-- Video Editor -->
       <ng-template #uploadFormCtr>
+        <app-alert *ngIf="showAlert" [color]="alertColor"> <p>{{ alertMsg }} </p> </app-alert>
 
         <!-- Form -->
-        <form>
+        <form [formGroup]="uploadForm" (ngSubmit)="uploadFile()" >
           <!-- Screenshots -->
           <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -44,12 +46,17 @@
           <!-- Title -->
           <div class="mt-4">
             <label class="block text-xl mb-4">Title</label>
-            <input type="text" class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
-            duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400">
+            <app-input [control]="title" placeholder="Title" ></app-input>
+            
           </div>
 
           <div class="mt-4 text-right">
-            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none">
+            <button [disabled]="inSubmission"
+            [ngClass]="{
+              'opacity-50': inSubmission,
+              'hover:bg-indigo-700': !inSubmission
+            }"
+             type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 focus:outline-none">
               Publish
             </button>
           </div>
