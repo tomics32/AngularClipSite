@@ -41,4 +41,10 @@ export class ClipService {
 
     )
   }
+
+  updateClip(id: string, title: string){
+    return this.clipsCollection.doc(id).update({
+      title
+    })   //function lets chose document from firebase database by id
+  }
 }
