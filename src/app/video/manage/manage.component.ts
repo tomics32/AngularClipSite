@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ClipService } from 'src/app/services/clip.service';
 import IClip from 'src/app/models/clip.model';
 import { ModalService } from 'src/app/services/modal.service';
-import { Icu } from '@angular/compiler/src/i18n/i18n_ast';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -15,20 +15,24 @@ export class ManageComponent implements OnInit {
   videoOrder = '1';
   clips: IClip[] = [];
   activeClip: IClip | null = null;
+  sort$: BehaviorSubject<string>;
 
   constructor(
   private router: Router,
   private route: ActivatedRoute,
   private clipService: ClipService,
   private modal: ModalService
-  ) { }
+  ) { 
+    this.sort$ = new BehaviorSubject(this.videoOrder);
+  }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params: Params) => {
-      this.videoOrder = params.sort === '2' ? params.sort: 1
+    this.route.queryParams.subscribe((params: Params) => {
+      this.videoOrder = params.sort == '2' ? params.sort: '1'
+      this.sort$.next(this.videoOrder);
     })
 
-    this.clipService.getUserClips().subscribe(docs => {
+    this.clipService.getUserClips(this.sort$).subscribe(docs => {
       this.clips = []
 
       docs.forEach(doc => {
@@ -40,12 +44,10 @@ export class ManageComponent implements OnInit {
     })
   }
 
-  sort($event: Event)
-  {
-    const { value } = (event?.target as HTMLSelectElement);
+  sort(event: Event) {
+    const { value } = (event.target as HTMLSelectElement)
 
-    this.router.navigate([], 
-    {
+    this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         sort: value
@@ -62,6 +64,28 @@ export class ManageComponent implements OnInit {
     
 
     this.modal.toggleModal('editClip');
+  }
+
+  update($event: IClip)
+  {
+    this.clips.forEach((element, index) => {
+      if(element.docID == $event.docID)
+      {
+        this.clips[index].title = $event.title
+      }
+    })
+  }
+
+  deleteClip($event: Event, clip: IClip)
+  {
+    $event.preventDefault();
+
+    this.clipService.deleteClip(clip);
+    this.clips.forEach((element, index) =>{
+      if(element.docID == clip.docID) {
+        this.clips.splice(index, 1)
+      }
+    })
   }
 
 }
