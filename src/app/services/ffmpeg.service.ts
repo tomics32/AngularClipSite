@@ -31,7 +31,7 @@ export class FfmpegService {
     const data = await fetchFile(file);
     this.ffmpeg.FS('writeFile', file.name, data);
 
-    const seconds =[1,2,3];
+    const seconds =[3,4,5];
     const commands: string[] = [];
 
 
@@ -70,5 +70,13 @@ export class FfmpegService {
     this.isRunning = false;
     return screenshots
 
+  }
+
+  async blobFromURL(url: string)
+  {
+    const response = await fetch(url)
+    const blob = await response.blob()
+
+    return blob
   }
 }
