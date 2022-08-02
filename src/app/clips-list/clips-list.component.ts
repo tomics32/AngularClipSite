@@ -1,12 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ClipService } from '../services/clip.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-clips-list',
   templateUrl: './clips-list.component.html',
-  styleUrls: ['./clips-list.component.css']
+  styleUrls: ['./clips-list.component.css'],
+  providers: [DatePipe]
 })
 export class ClipsListComponent implements OnInit, OnDestroy {
+
+  @Input() scrollable = true;
 
   constructor(
     public clipService: ClipService
@@ -15,11 +19,19 @@ export class ClipsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if(this.scrollable == true)
+    {
     window.addEventListener('scroll', this.handleScroll)  
+    }
   }
 
   ngOnDestroy() {
+    if(this.scrollable)
+    {
     window.removeEventListener('scroll', this.handleScroll) //always remember to destroy eventlistener
+   }
+
+   this.clipService.pageClips = [];
   }
 
   handleScroll = () => {
